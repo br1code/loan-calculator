@@ -1,9 +1,20 @@
 "use strict";
-document.getElementById('loan-form').addEventListener('submit', calculateResults);
+document.getElementById('loan-form').addEventListener('submit', function(e) {
+    // Prevent default behavior
+    e.preventDefault();
+
+    // Show loading to better UI experience
+    showLoading();
+
+    // After two seconds, calculate the results and clear the loading
+    setTimeout(function() {
+        calculateResults();
+        clearLoading();
+    }, 2000);
+});
 
 // Calculate Results
-function calculateResults(e) {
-    e.preventDefault();
+function calculateResults() {
     // UI Elements
     const amount = getFromUI('#amount');
     const interest = getFromUI('#interest');
@@ -26,9 +37,12 @@ function calculateResults(e) {
         setValue(monthlyPayment, monthly);
         setValue(totalPayment, (monthly * calculatedPayments));
         setValue(totalInterest, (monthly * calculatedPayments) - principal);
+        // Show results
+        getFromUI('#results').style.display = 'block';
     } else {
         // If the error is not being displayed, show it
         if (!getFromUI('.alert')) {
+            // Show error message
             showError('Please check your numbers');
         }  
     }
@@ -64,6 +78,29 @@ function showError(error) {
     // Insert error above heading
     card.insertBefore(errorDiv, heading);
 
+    // Hide results
+    getFromUI('#results').style.display = 'none';
+
     // Clear error after 3 seconds
     setTimeout(clearError, 3000);
+}
+
+function showLoading() {
+    // Hide results
+    getFromUI('#results').style.display = 'none';
+    // Show loader
+    getFromUI('#loading').style.display = 'block';
+    // Reset results
+    clearResults();
+}
+
+function clearLoading() {
+    // Hide loader
+    getFromUI('#loading').style.display = 'none';
+}
+
+function clearResults() {
+    getFromUI('#monthly-payment').value = '';
+    getFromUI('#total-payment').value = '';
+    getFromUI('#total-interest').value = '';
 }
