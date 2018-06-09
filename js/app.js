@@ -34,10 +34,11 @@ function calculateResults() {
 
     // If monthly is a legal number, display results
     if (isFinite(monthly)) {
+        // Set values of each input
         setValue(monthlyPayment, monthly);
         setValue(totalPayment, (monthly * calculatedPayments));
         setValue(totalInterest, (monthly * calculatedPayments) - principal);
-        // Show results
+        // Display results
         getFromUI('#results').style.display = 'block';
     } else {
         // If the error is not being displayed, show it
